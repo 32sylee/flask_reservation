@@ -33,20 +33,20 @@
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-    <a id="bernini" class="navbar-brand bernini" href="{{ url_for('home') }}">Bernini</a>
+    <a id="bernini" class="navbar-brand bernini" href=#>Bernini</a>
 
     <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a id="home" class="nav-link" href="{{ url_for('home') }}">Home</a>
+                <a id="home" class="nav-link" href=#>dddddd</a>
             </li>
             <li class="nav-item dropdown">
                 <a id="reservation" class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button"
                    aria-haspopup="true"
                    aria-expanded="false">Reservation</a>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{ url_for('book') }}">예약하기</a>
-                    <a class="dropdown-item" href="{{ url_for('chkguest') }}">예약확인</a>
+                    <a class="dropdown-item" href=#>예약하기</a>
+                    <a class="dropdown-item" href=#>예약확인</a>
                 </div>
             </li>
         </ul>
@@ -54,13 +54,6 @@
 </nav>
 
 {% block content %}{% endblock %}
-
-<div id="footer" class="align-center">
-    <p><small>업체명 : (주)베르니니 ㅣ &nbsp;대표자 : 김셰프<br>
-        사업자등록번호 : 000-00-00000<br>주소 : 서울특별시 강남구 언주로152길 15-6<br>
-        전화 : 00-0000-0000 &nbsp;ㅣ &nbsp;팩스 : 00-0000-0000<br>
-        Copyright (c)bernini. All rights reserved</small></p>
-</div>
 
 </body>
 </html>
