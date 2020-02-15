@@ -1,0 +1,68 @@
+{% extends "layout.html" %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+  		$("#reservation").addClass("active");
+
+  		$('button').on("click", function(e) {
+
+            e.preventDefault();
+
+            isCorrect = click_chk();
+            if(isCorrect == 1) {
+                $("form").submit();
+            } else {
+                return;
+            }
+  		});
+  	});
+
+  	function click_chk() {
+        var pattern = /^01[0-9]-\d{3,4}-\d{4}$/;
+
+        var name = $("#book-name").val()
+        var phone = $("#book-phone").val()
+
+  		if (name == "") {
+  			alert("예약자명을 입력하세요.");
+  			$("#book-name").focus();
+  			return 0;
+  		}
+  		else if (phone == "") {
+  			alert("연락처를 입력하세요.");
+  			$("#book-phone").focus();
+  			return 0;
+  		}
+  		else if (phone.match(pattern) == null) {
+  			alert("연락처를 형식에 맞게 입력해주세요.");
+  			$("#book-phone").focus();
+  			return 0;
+  		}
+  		else {
+  		    return 1;
+  		}
+  	}
+</script>
+{% endblock %}
+
+{% block content %}
+
+<div class="small-wrap">
+    <h3>예약확인</h3>
+    <p class="custom-title">예약정보를 입력해주세요</p>
+    <form action="/booklist" method="post">
+        <div class="form-group">
+            <label for="book-name">예약자명</label>
+            <input class="form-control" id="book-name" name="name">
+        </div>
+        <div class="form-group">
+            <label for="book-phone">연락처</label>
+            <input class="form-control" id="book-phone" name="phone" placeholder="010-0000-0000">
+        </div>
+        <hr class="mb-4">
+        <button class="btn btn-lg btn-primary btn-block" type="submit">예약조회</button>
+    </form>
+</div>
+
+{% endblock %}

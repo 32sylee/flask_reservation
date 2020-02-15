@@ -1,0 +1,48 @@
+*{
+font-family: 'Noto Sans KR', sans-serif !important;
+}
+
+.bernini{
+font-family: 'Yellowtail', cursive !important;
+}
+
+.custom-title{
+margin-bottom: 30px;
+}
+
+.navbar{
+margin-bottom: 30px;
+}
+
+.wrap{
+	width: 550px;
+	margin: auto;
+}
+
+.middle-wrap{
+	width: 400px;
+	margin: auto;
+}
+
+.small-wrap{
+	width: 330px;
+	margin: auto;
+	margin-top: 50px;
+	margin-bottom: 80px;
+}
+
+.align-center{
+text-align:center;
+}
+
+#footer{
+margin-top: 30px;
+padding: 15px;
+}
+
+.right{
+display:flex;
+flex-wrap:wrap;
+align-items:center;
+justify-content:flex-end;
+}

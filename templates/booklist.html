@@ -1,0 +1,81 @@
+{% extends "layout.html" %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+  		$("#reservation").addClass("active");
+  	});
+
+    function click_cancel(id) {
+
+        $.ajax({
+            type: "POST",
+            url: "/cancelbook",
+            data: { id: id },
+            success: function(response){
+                if (response['result'] == 'success') {
+                    $.noConflict();
+                    $("#myModal").modal('show');
+                }
+            }
+        })
+  	}
+
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Modal -->
+<div class="modal" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">예약취소</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>예약이 취소되었습니다.</p>
+            </div>
+            <div class="modal-footer">
+                <form action="/booklist" method="post">
+                    <input type="hidden" name="name" value="{{ name }}">
+                    <input type="hidden" name="phone" value="{{ phone }}">
+                    <button type="submit" class="btn btn-secondary">Close</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="wrap">
+    <h3 class="custom-title">{{ name }}님 예약내역</h3>
+    {% for booking in bookings %}
+    <div class="card mb-3
+    {% if booking.status_str == '예약승인' %} text-white bg-primary
+    {% elif booking.status_str == '예약신청중' %} border-primary
+    {% else %} bg-light {% endif %}">
+        <div class="card-header">{{ booking.status_str }}</div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-7">
+                    <h5 class="card-title">{{ booking.date|datetime() }}</h5>
+                    <p class="card-text">시간 {{ booking.time }} | 인원 {{ booking.count }}명</p>
+                </div>
+                <div class="col-5 right">
+                    {% if booking.status_str == '예약승인' or booking.status_str == '예약신청중' %}
+                    <form>
+                        <button type="button" class="btn btn-secondary" onclick="click_cancel('{{ booking._id }}')">예약취소</button>
+                    </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

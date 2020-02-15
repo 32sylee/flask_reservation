@@ -1,0 +1,104 @@
+{% extends "layout.html" %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+  		$("#reservation").addClass("active");
+  	});
+
+    function click_book() {
+        var pattern = /^01[0-9]-\d{3,4}-\d{4}$/;
+
+        var date = $("#book-date").val()
+        var time = $("#book-time").val()
+        var count = $("#book-count").val()
+        var name = $("#book-name").val()
+        var phone = $("#book-phone").val()
+
+  		if (date == "-- 일자를 선택하세요 --") {
+  			alert("예약일자를 선택하세요.");
+  			$("#book-date").focus();
+  		}
+  		else if (time == "-- 시간을 선택하세요 --") {
+  			alert("예약시간을 선택하세요.");
+  			$("#book-time").focus();
+  		}
+      else if (count == "-- 인원을 선택하세요 --") {
+        alert("인원을 선택하세요.");
+        $("#book-count").focus();
+      }
+  		else if (name == "") {
+  			alert("예약자명을 입력하세요.");
+  			$("#book-name").focus();
+  		}
+  		else if (phone == "") {
+  			alert("연락처를 입력하세요.");
+  			$("#book-phone").focus();
+  		}
+  		else if (phone.match(pattern) == null) {
+  			alert("연락처를 형식에 맞게 입력해주세요.");
+  			$("#book-phone").focus();
+  		}
+  		else {
+            $.ajax({
+                type: "POST",
+                url: "/makebook",
+                data: { date: date,
+                        time: time,
+                        count: count,
+                        name: name,
+                        phone: phone},
+                success: function(response){
+                    window.location.href = "/bookdone";
+                }
+            })
+  		}
+  	}
+
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="wrap">
+    <h3 class="custom-title">예약하기</h3>
+    <div class="form-group">
+        <label for="book-date">예약일자</label>
+        <select class="form-control" id="book-date">
+            <option selected>-- 일자를 선택하세요 --</option>
+            {% for d in dates %}
+            <option value="{{ d.date|datetime('%Y-%m-%d') }}">{{ d.date|datetime() }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="book-time">예약시간</label>
+        <select class="form-control" id="book-time">
+            <option selected>-- 시간을 선택하세요 --</option>
+            {% for t in times %}
+            <option value="{{ t.time }}">{{ t.time }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="book-count">인원수</label>
+        <select class="form-control" id="book-count">
+            <option selected>-- 인원을 선택하세요 --</option>
+            <option value=2>2명</option>
+            <option value=3>3명</option>
+            <option value=4>4명</option>
+            <option value=5>5명</option>
+            <option value=6>6명</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <label for="book-name">예약자명</label>
+        <input class="form-control" id="book-name">
+    </div>
+    <div class="form-group">
+        <label for="book-phone">연락처</label>
+        <input class="form-control" id="book-phone" placeholder="010-0000-0000">
+    </div>
+    <hr class="mb-4">
+    <button type="button" class="btn btn-lg btn-primary btn-block" onclick="click_book()">예약신청</button>
+</div>
+{% endblock %}
