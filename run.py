@@ -1,7 +1,7 @@
 from flask import Flask
 from filters import *
-from admin.admin import admin_api
-from user.user import user_api
+from blueprints.admin import admin_api
+from blueprints.user import user_api
 
 app = Flask(__name__)
 

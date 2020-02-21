@@ -12,7 +12,7 @@ db = client.bernini
 
 @user_api.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('user/home.html')
 
 
 @user_api.route('/book')
@@ -20,17 +20,17 @@ def book():
     dates = list(db.date.find({}, {'_id': 0}).sort("date", 1))
     times = list(db.time.find({}, {'_id': 0}).sort("time", 1))
 
-    return render_template('book.html', dates=dates, times=times)
+    return render_template('user/book.html', dates=dates, times=times)
 
 
 @user_api.route('/chkguest')
 def chkguest():
-    return render_template('chkguest.html')
+    return render_template('user/chkguest.html')
 
 
 @user_api.route('/bookdone')
 def bookdone():
-    return render_template('bookdone.html')
+    return render_template('user/bookdone.html')
 
 
 @user_api.route('/booklist', methods=['POST'])
@@ -58,7 +58,7 @@ def booklist():
         elif bookings[i]['status'] == 2:
             bookings[i]['status_str'] = "예약취소"
 
-    return render_template('booklist.html', name=name_receive, phone=phone_receive, bookings=bookings)
+    return render_template('user/booklist.html', name=name_receive, phone=phone_receive, bookings=bookings)
 
 
 @user_api.route('/makebook', methods=['POST'])

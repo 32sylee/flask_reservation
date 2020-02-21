@@ -1,0 +1,145 @@
+{% extends "admin/layout.html" %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+  		$("#settingdate").addClass("active");
+  	});
+
+    function showModal(id) {
+        $(id).modal('show');
+    }
+
+    function addDate() {
+        startDate = $('#startDate').val();
+        endDate = $('#endDate').val();
+
+        $.ajax({
+                type: "POST",
+                url: "{{ url_for('admin_api.adddate') }}",
+                data: { start_date: startDate, end_date: endDate },
+                success: function(response){
+                    var answer = response['result']
+                    if (answer == 'success') {
+                        window.location.href = "{{ url_for('admin_api.settingdate') }}";
+                    }
+                }
+            });
+    }
+
+    function showDelete() {
+        $("#btn-set-delete").hide()
+        $("#btn-set-add").hide()
+        $("#btn-delete").show()
+        $(".td-check").show()
+        $(".td-no-check").hide()
+    }
+
+    function deleteDate() {
+        var delchk = [];
+
+        $('.chk:checked').each(function(){
+            delchk.push($(this).val());
+        });
+        var delchk_str = JSON.stringify(delchk);
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('admin_api.deletedate') }}",
+            data: {'delete_dates': delchk_str},
+            success: function(response) {
+                var answer = response.result;
+                if (answer == 'success') {
+                    window.location.href = "{{ url_for('admin_api.settingdate') }}";
+                }
+            }
+        });
+    }
+
+
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Modal1 -->
+<div class="modal" id="addModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">날짜추가</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="col-form-label" for="startDate">시작일</label>
+                    <input type="text" class="form-control" placeholder="ex) 2020-01-01" id="startDate">
+                </div>
+                <div class="form-group">
+                    <label class="col-form-label" for="endDate">종료일</label>
+                    <input type="text" class="form-control" placeholder="ex) 2020-01-01" id="endDate">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="addDate()">추가하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal2 -->
+<div class="modal" id="deleteModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">삭제하기</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>선택하신 날짜를 삭제하시겠습니까?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="deleteDate()">삭제하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Content -->
+<div class="wrap">
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">예약가능일
+                <button type="button" class="btn btn-secondary btn-sm" onclick="showDelete()" id="btn-set-delete"
+                        style="float: right;">날짜삭제
+                </button>
+                <button type="button" class="btn btn-primary btn-sm" onclick="showModal('#addModal')" id="btn-set-add"
+                        style="float: right; margin-right: 10px">날짜추가
+                </button>
+                <button type="button" class="btn btn-secondary btn-sm" onclick="showModal('#deleteModal')" id="btn-delete"
+                        style="float: right; display: None;">삭제하기
+                </button>
+            </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for date in dates %}
+        <tr>
+            <td class="td-check" style="display: None;">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input chk" id="{{date._id}}" value="{{ date._id }}">
+                    <label class="custom-control-label" for="{{date._id}}">{{ date.date|datetime() }}</label>
+                </div>
+            </td>
+            <td class="td-no-check">
+                {{ date.date|datetime() }}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
