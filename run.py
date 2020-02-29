@@ -14,4 +14,5 @@ app.jinja_env.filters['datetime'] = format_datetime
 
 
 if __name__ == '__main__':
+    app.secret_key = "123"
     app.run('0.0.0.0', port=5000, debug=True)

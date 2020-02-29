@@ -3,17 +3,10 @@ from pymongo import MongoClient
 client = MongoClient('localhost', 27017)
 db = client.bernini
 
-# db.booking.insert_one(
-#     {'date': datetime(2020, 2, 11, 0, 0, 0),
-#      'booking_list':
-#          {
-#              'time': '12:00',
-#              'name': '홍길동',
-#              'num': 2,
-#              'phone': '010-9687-6488',
-#              'state': 1    # 0: 예약신청중, 1: 예약완료, 2: 예약취소
-#          }
-#      })
+db.booking.update_many({}, {'$set': {'status': 0}})
+
+db.admin.insert_one(
+    {'id': '32sylee', 'password': '1111', 'name': '이수연'})
 
 # db.date.insert_one({'date': datetime(2020, 2, 11)})
 # db.date.insert_one({'date': datetime(2020, 2, 12)})

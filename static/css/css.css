@@ -2,32 +2,40 @@
 font-family: 'Noto Sans KR', sans-serif !important;
 }
 
-.bernini{
-font-family: 'Yellowtail', cursive !important;
+.sm-logo{
+width: 70px;
+}
+
+.logo{
+width: 300px;
 }
 
 .custom-title{
 margin-bottom: 30px;
 }
 
-.navbar{
-margin-bottom: 30px;
-}
-
 .wrap{
 	width: 550px;
 	margin: auto;
+	margin-top: 30px;
+}
+
+.wide-wrap{
+	width: 700px;
+	margin: auto;
+	margin-top: 30px;
 }
 
 .middle-wrap{
 	width: 400px;
 	margin: auto;
+	margin-top: 30px;
 }
 
 .small-wrap{
 	width: 330px;
 	margin: auto;
-	margin-top: 50px;
+	margin-top: 80px;
 	margin-bottom: 80px;
 }
 
@@ -45,4 +53,17 @@ display:flex;
 flex-wrap:wrap;
 align-items:center;
 justify-content:flex-end;
+}
+
+.bg-home{
+height: 130vh;
+background-image: url('/static/media/main_image.jpg');
+background-size: cover;
+}
+
+.main{
+position: absolute;
+left: 50%;
+top: 55%;
+transform:translate(-50%, -50%);
 }

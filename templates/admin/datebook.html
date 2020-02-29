@@ -1,0 +1,66 @@
+{% extends "admin/layout.html" %}
+
+{% block js %}
+<script>
+    $(document).ready(function(){
+  		$("#datebook").addClass("active");
+
+  		$("#book-date").val("{{selected_date}}").prop("selected", true);
+  	});
+
+  	function goToBooklist(id) {
+  	    window.location.href = "booklist?id=" + id;
+  	}
+
+  	$(function() {
+        $("#book-date").change(function() {
+            window.location.href = "datebook?date=" + this.value;
+        });
+    });
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="wide-wrap">
+    <h3 class="custom-title">일자별 예약 현황</h3>
+    <div class="form-group">
+        <select class="form-control" id="book-date">
+            {% for d in dates %}
+            <option value="{{ d.date|datetime('%Y-%m-%d') }}">{{ d.date|datetime() }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th scope="col">시간</th>
+            <th scope="col">예약자명</th>
+            <th scope="col">인원</th>
+            <th scope="col">연락처</th>
+            <th scope="col">예약상태</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for booking in bookings %}
+        {% if booking.status==0 %}
+        <tr class="table-secondary" onclick="goToBooklist('{{ booking._id }}')">
+            <td>{{ booking.time }}</td>
+            <td>{{ booking.name }}</td>
+            <td>{{ booking.count }}명</td>
+            <td>{{ booking.phone }}</td>
+            <td>{{ booking.status_str }}</td>
+        </tr>
+        {% else %}
+        <tr onclick="goToBooklist('{{ booking._id }}')">
+            <td>{{ booking.time }}</td>
+            <td>{{ booking.name }}</td>
+            <td>{{ booking.count }}명</td>
+            <td>{{ booking.phone }}</td>
+            <td>{{ booking.status_str }}</td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

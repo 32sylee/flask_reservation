@@ -2,6 +2,7 @@ from flask import Blueprint, render_template, jsonify, request
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 from filters import *
+from functions import *
 
 user_api = Blueprint('user_api', __name__, template_folder='templates')
 
@@ -17,7 +18,9 @@ def home():
 
 @user_api.route('/book')
 def book():
-    dates = list(db.date.find({}, {'_id': 0}).sort("date", 1))
+    today = get_today()
+
+    dates = list(db.date.find({'date': {'$gte': today}}, {'_id': 0}).sort("date", 1))
     times = list(db.time.find({}, {'_id': 0}).sort("time", 1))
 
     return render_template('user/book.html', dates=dates, times=times)
@@ -26,11 +29,6 @@ def book():
 @user_api.route('/chkguest')
 def chkguest():
     return render_template('user/chkguest.html')
-
-
-@user_api.route('/bookdone')
-def bookdone():
-    return render_template('user/bookdone.html')
 
 
 @user_api.route('/booklist', methods=['POST'])
@@ -46,9 +44,7 @@ def booklist():
 
         elif bookings[i]['status'] == 1:
 
-            # 현재 날짜의 00:00 계산
-            now = datetime.today()
-            today = datetime(now.year, now.month, now.day)
+            today = get_today()
 
             if bookings[i]['date'] >= today:
                 bookings[i]['status_str'] = "예약승인"

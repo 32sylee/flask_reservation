@@ -4,11 +4,23 @@
 <script>
     $(document).ready(function(){
   		$("#booklist").addClass("active");
+
+        $("#status").val("{{status}}").prop("selected", true);
   	});
+
+  	$(function() {
+        $("#status").change(function() {
+            window.location.href = "booklist?status=" + this.value;
+        });
+    });
 
     function showModal(id, booking_id) {
         $(id).modal('show');
-        $("#btn-approve").attr("onclick", "approve('" + booking_id + "')");
+        if (id == '#approveModal') {
+            $("#btn-approve").attr("onclick", "approve('" + booking_id + "')");
+        } else if (id == '#cancelModal') {
+            $("#btn-cancel").attr("onclick", "cancel('" + booking_id + "')");
+        }
     }
 
     function approve(booking_id) {
@@ -19,7 +31,29 @@
             success: function(response) {
                 var answer = response.result;
                 if (answer == 'success') {
-                    window.location.href = "{{ url_for('admin_api.booklist') }}";
+                    {% if id == None %}
+                    window.location.href = "booklist";
+                    {% else %}
+                    window.location.href = "booklist?id=" + "{{id}}";
+                    {% endif %}
+                }
+            }
+        });
+    }
+
+    function cancel(booking_id) {
+        $.ajax({
+            type: "POST",
+            url: "{{ url_for('admin_api.cancel') }}",
+            data: {'booking_id': booking_id},
+            success: function(response) {
+                var answer = response.result;
+                if (answer == 'success') {
+                    {% if id == None %}
+                    window.location.href = "booklist";
+                    {% else %}
+                    window.location.href = "booklist?id=" + "{{id}}";
+                    {% endif %}
                 }
             }
         });
@@ -39,7 +73,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                <p>예약건을 승인하시겠습니까?</p>
+                <p>예약을 승인하시겠습니까?</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="btn-approve">승인하기</button>
@@ -48,9 +82,40 @@
     </div>
 </div>
 
+<!-- Modal2 -->
+<div class="modal" id="cancelModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">예약취소</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>예약을 취소하시겠습니까?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btn-cancel">취소하기</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Content -->
 <div class="wrap">
     <h3 class="custom-title">최근 예약 신청내역</h3>
+    {% if not id %}
+    <div class="form-group">
+        <select class="form-control" id="status">
+            <option value=3>전체</option>
+            <option value=0>예약신청중</option>
+            <option value=1>예약승인</option>
+            <option value=2>예약취소</option>
+        </select>
+    </div>
+    {% endif %}
+
     {% for booking in bookings %}
     <div class="card mb-3
     {% if booking.status_str == '예약승인' %} border-primary
@@ -59,7 +124,7 @@
         <div class="card-header">{{ booking.status_str }}</div>
         <div class="card-body">
             <div class="row">
-                <div class="col-7">
+                <div class="col-7" onclick="window.location.href = 'datebook?date=' + '{{booking.date|datetime('%Y-%m-%d')}}';">
                     <h5 class="card-title">{{ booking.date|datetime() }}</h5>
                     <p class="card-text">시간 {{ booking.time }} | 인원 {{ booking.count }}명<br>
                         {{ booking.name }} {{ booking.phone }}</p>
@@ -70,7 +135,7 @@
                         {% if booking.status_str == '예약신청중' %}
                         <button type="button" class="btn btn-secondary" onclick="showModal('#approveModal', '{{ booking._id }}')">승인</button>
                         {% endif %}
-                        <button type="button" class="btn btn-secondary" onclick="click_cancel('{{ booking._id }}')">취소</button>
+                        <button type="button" class="btn btn-secondary" onclick="showModal('#cancelModal', '{{ booking._id }}')">취소</button>
                     </form>
                     {% endif %}
                 </div>
