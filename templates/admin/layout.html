@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Bernini</title>
 
     <!-- Bootstrap -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
@@ -30,6 +30,9 @@
     <a id="bernini" class="navbar-brand" href="{{ url_for('user_api.home') }}">
         <img src="{{ url_for('static', filename='media/logo.png') }}" class="sm-logo">
     </a>
+    <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
     <div class="collapse navbar-collapse" id="navbarColor03">
         <ul class="navbar-nav mr-auto">
@@ -43,7 +46,7 @@
                 <a id="settingdate" class="nav-link" href="{{ url_for('admin_api.settingdate') }}">예약일 관리</a>
             </li>
             <li class="nav-item">
-                <a id="logout" class="nav-link" href="#" onclick="logout()" style="float: right;">logout</a>
+                <a id="logout" class="nav-link" href="#" onclick="logout()">logout</a>
             </li>
         </ul>
     </div>

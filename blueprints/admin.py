@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 import json
 
 from flask import Blueprint, render_template, jsonify, request, session, redirect, url_for
@@ -7,6 +9,7 @@ from filters import *
 from functions import *
 from datetime import timedelta
 from bson.objectid import ObjectId
+import sms
 
 admin_api = Blueprint('admin_api', __name__, template_folder='templates/admin')
 
@@ -132,6 +135,11 @@ def deletedate():
 def approve():
     booking_id = ObjectId(request.form['booking_id'])
     db.booking.update_one({'_id': booking_id}, {'$set': {'status': 1}})
+
+    # 예약승인 문자 보내기
+    booking = db.booking.find_one({'_id': booking_id}, {'_id': 0, 'name': 1, 'phone': 1, 'date': 1})
+    sms.send(booking)
+
     return jsonify({'result': 'success'})
 
 

@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 from flask import Flask
 from filters import *
 from blueprints.admin import admin_api

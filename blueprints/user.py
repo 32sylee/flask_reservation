@@ -1,3 +1,5 @@
+#-*- coding: utf-8 -*-
+
 from flask import Blueprint, render_template, jsonify, request
 from pymongo import MongoClient
 from bson.objectid import ObjectId
